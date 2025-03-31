@@ -22,7 +22,7 @@ class PixelApiService {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
-        let token = Keys.pixelAPIKey
+        let token = Keys.pixelApiKey
         request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await URLSession.shared.data(for: request)
@@ -49,7 +49,7 @@ class PixelApiService {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
-        let token = Keys.pixelAPIKey
+        let token = Keys.pixelApiKey
         request.setValue("\(token)", forHTTPHeaderField: "Authorization")
         
         let (data, response) = try await URLSession.shared.data(for: request)

@@ -10,9 +10,22 @@
 		9B3EA1FC2D8977F800549726 /* Pixel Scape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel Scape.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		9B10D57E2D9B26F600D986AF /* Exceptions for "Pixel Scape" folder in "Pixel Scape" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 9B3EA1FB2D8977F800549726 /* Pixel Scape */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		9B3EA1FE2D8977F800549726 /* Pixel Scape */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				9B10D57E2D9B26F600D986AF /* Exceptions for "Pixel Scape" folder in "Pixel Scape" target */,
+			);
 			path = "Pixel Scape";
 			sourceTree = "<group>";
 		};
