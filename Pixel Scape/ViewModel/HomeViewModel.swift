@@ -14,7 +14,7 @@ class HomeViewModel {
     @Published private(set) var imageData: Pixel?
     
     private let apiService = PixelApiService()
-    private var isFetching = false
+    var isFetching = false
     
     init () {
         Task {

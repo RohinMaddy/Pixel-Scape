@@ -61,6 +61,7 @@ class HomeViewController: UIViewController {
         imageCollectionView.delegate = self
         imageCollectionView.dataSource = self
         imageCollectionView.register(ImageCell.self, forCellWithReuseIdentifier: ImageCell.identifier)
+        imageCollectionView.register(LoaderCell.self, forCellWithReuseIdentifier: LoaderCell.identifier)
         imageCollectionView.layer.cornerRadius = 10
     }
     
@@ -78,19 +79,29 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
-        cell.configure(with: viewModel.imageData?.photos[indexPath.row].src.portrait ?? "")
-        return cell
-        
+        if indexPath.row != viewModel.imageData?.photos.count {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
+            cell.configure(with: viewModel.imageData?.photos[indexPath.row].src.portrait ?? "")
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LoaderCell.identifier, for: indexPath) as! LoaderCell
+            cell.inidicator.startAnimating()
+            return cell
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.imageData?.photos.count ?? 0
+        return (viewModel.imageData?.photos.count ?? 0 > 0) ? ((viewModel.imageData?.photos.count ?? 0) + 1) : 0
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
         {
-            layout.updateLayout(for: CGFloat.random(in: 250...350))
+            //if indexPath.row == viewModel.imageData?.photos.count && viewModel.isFetching {
+                return layout.updateLayout(for: CGFloat.random(in: 250...350))
+//            } else {
+//                let size = collectionView.frame.size
+//                return CGSize(width: size.width , height: size.height / 3)
+//            }
         }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -100,17 +111,24 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         }
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        let scrollViewHeight = scrollView.frame.size.height
-
-        if offsetY > contentHeight - scrollViewHeight - 100 { // Threshold
-            page+=1
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if (indexPath.row == viewModel.imageData?.photos.count ) && !viewModel.isFetching {
+            let page = (Int(viewModel.imageData?.photos.count ?? 0) / 20) + 1
             viewModel.loadMore(page: page, query: searchTextField?.text)
-            imageCollectionView.reloadData()
         }
     }
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let offsetY = scrollView.contentOffset.y
+//        let contentHeight = scrollView.contentSize.height
+//        let scrollViewHeight = scrollView.frame.size.height
+//
+//        if offsetY > contentHeight - scrollViewHeight - 100 { // Threshold
+//            page+=1
+//            viewModel.loadMore(page: page, query: searchTextField?.text)
+//            imageCollectionView.reloadData()
+//        }
+//    }
     
 }
 

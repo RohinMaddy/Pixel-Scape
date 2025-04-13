@@ -10,6 +10,8 @@ import UIKit
 
 class LoaderCell: UICollectionViewCell {
     
+    static let identifier = "LoaderCell"
+    
     var inidicator : UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .large
