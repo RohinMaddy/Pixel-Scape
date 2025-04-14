@@ -12,7 +12,7 @@ class LoaderCell: UICollectionViewCell {
     
     static let identifier = "LoaderCell"
     
-    var inidicator : UIActivityIndicatorView = {
+    var indicator : UIActivityIndicatorView = {
         let view = UIActivityIndicatorView()
         view.style = .large
         return view
@@ -28,9 +28,19 @@ class LoaderCell: UICollectionViewCell {
     }
     
     func setup(){
-        contentView.addSubview(inidicator)
-        inidicator.center = contentView.center
-        inidicator.startAnimating()
+        contentView.addSubview(indicator)
+        contentView.layer.cornerRadius = 10
+        contentView.backgroundColor = .secondaryShade
+        indicator.color = .tertiaryShade
+
+        indicator.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            indicator.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            indicator.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+        ])
+
+        indicator.startAnimating()
     }
     
 }

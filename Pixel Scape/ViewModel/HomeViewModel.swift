@@ -15,6 +15,7 @@ class HomeViewModel {
     
     private let apiService = PixelApiService()
     var isFetching = false
+    var onItemsAppended: (([IndexPath]) -> Void)?
     
     init () {
         Task {
@@ -41,20 +42,24 @@ class HomeViewModel {
         isFetching = true
         var data = Pixel(photos: [])
         
-        Task{
-            do {
-                if let query, query != "" {
-                    data = try await apiService.getSearchedWallpapers(query: query, page: page)
-                } else {
-                    data = try await apiService.getCuratedPhotos(page: page)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            Task{
+                do {
+                    if let query, query != "" {
+                        data = try await self.apiService.getSearchedWallpapers(query: query, page: page)
+                    } else {
+                        data = try await self.apiService.getCuratedPhotos(page: page)
+                    }
+                    let start = self.imageData?.photos.count
+                    self.imageData?.photos.append(contentsOf: data.photos)
+                    let end = self.imageData?.photos.count
+                    let indexPaths = ((start ?? 0)..<(end ?? 0)).map { IndexPath(item: $0, section: 0) }
+                    self.onItemsAppended?(indexPaths)
+                } catch {
+                    print(error)
                 }
-                
-                imageData?.photos.append(contentsOf: data.photos)
-            } catch {
-                print(error)
+                self.isFetching = false
             }
-            isFetching = false
         }
     }
-    
 }
