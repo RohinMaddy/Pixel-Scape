@@ -48,7 +48,7 @@ class HomeViewController: UIViewController {
         viewModel.$imageData
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                //self?.imageCollectionView.reloadData()
+                self?.imageCollectionView.reloadData()
             }
             .store(in: &subscriptions)
         viewModel.$searchText
@@ -64,6 +64,11 @@ class HomeViewController: UIViewController {
         imageCollectionView.register(LoaderCell.self, forCellWithReuseIdentifier: LoaderCell.identifier)
         imageCollectionView.layer.cornerRadius = 10
         
+        updateCollectionView()
+    }
+    
+    @MainActor
+    func updateCollectionView() {
         viewModel.onItemsAppended = { [weak self] indexPaths in
             guard let self = self else { return }
             self.imageCollectionView.performBatchUpdates {

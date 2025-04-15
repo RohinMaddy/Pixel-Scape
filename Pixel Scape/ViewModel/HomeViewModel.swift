@@ -26,6 +26,7 @@ class HomeViewModel {
     func fetchPixel(page: Int = 1, query: String? = nil) {
         Task{
             do {
+                imageData = Pixel(photos: [])
                 if let query, query != "" {
                     imageData = try await apiService.getSearchedWallpapers(query: query, page: page)
                 } else {
