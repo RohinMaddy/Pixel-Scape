@@ -140,6 +140,29 @@ class EditViewController: UIViewController {
         colorPicker.addTarget(self, action: #selector(colorChanged(_:)), for: .valueChanged)
     }
     
+    func snapshotExcluding(viewsToHide: [UIView], in containerView: UIView) -> UIImage {
+        viewsToHide.forEach { $0.isHidden = true }
+        
+        containerView.layoutIfNeeded()
+
+        let renderer = UIGraphicsImageRenderer(bounds: containerView.bounds)
+        let image = renderer.image { ctx in
+            containerView.drawHierarchy(in: containerView.bounds, afterScreenUpdates: true)
+        }
+
+        viewsToHide.forEach { $0.isHidden = false }
+
+        return image
+    }
+    
+    func renderViewToImage(_ view: UIView) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(bounds: view.bounds)
+        return renderer.image { context in
+            view.layer.render(in: context.cgContext)
+        }
+    }
+
+    
     @objc func colorChanged(_ sender: UIColorWell) {
         imageText.textColor = sender.selectedColor
     }
@@ -153,7 +176,9 @@ class EditViewController: UIViewController {
     }
     
     @objc private func didTapNextButton() {
-        //handle sharing image
+        let renderedImage = snapshotExcluding(viewsToHide: [editButton, doneButton], in: view)
+        let activityVC = UIActivityViewController(activityItems: [renderedImage], applicationActivities: nil)
+        show(activityVC, sender: self)
     }
 
     @objc private func didTapEditButton() {
