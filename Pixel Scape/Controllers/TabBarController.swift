@@ -18,7 +18,7 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
             item1.tabBarItem = UITabBarItem(title: "Pixel", image: UIImage(systemName: "photo.circle.fill"), selectedImage: UIImage(systemName: "photo.circle.fill"))
             
             if let item2 = storyboard.instantiateViewController(withIdentifier: "LikedViewController") as? LikedViewController {
-                item2.tabBarItem = UITabBarItem(title: "Settings", image: UIImage(systemName: "heart.circle.fill"), selectedImage: UIImage(systemName: "heart.circle.fill"))
+                item2.tabBarItem = UITabBarItem(title: "Liked", image: UIImage(systemName: "heart.circle.fill"), selectedImage: UIImage(systemName: "heart.circle.fill"))
                 
                 self.viewControllers = [item1, item2]
             } else {
