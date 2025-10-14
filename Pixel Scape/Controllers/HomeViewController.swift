@@ -93,7 +93,17 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row != viewModel.imageData?.photos.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
-            cell.configure(with: viewModel.imageData?.photos[indexPath.row].src.portrait ?? "")
+            if let imageId = viewModel.imageData?.photos[indexPath.row].id,
+                let imageUrl = viewModel.imageData?.photos[indexPath.row].src.portrait {
+                let isLiked =  viewModel.getSavedImages().contains(where: { $0.id == imageId })
+                print(isLiked)
+                cell.onSaveTapped = { [weak self] in
+                    cell.setButtonImage(isLiked: isLiked)
+                    self?.viewModel.toggleSave(imageId: Int64(imageId), ImageUrl: imageUrl, isLiked: isLiked)
+                    self?.imageCollectionView.reloadItems(at: [indexPath])
+                }
+                cell.configure(with: imageUrl, isLiked: isLiked)
+            }
             return cell
             
         } else {

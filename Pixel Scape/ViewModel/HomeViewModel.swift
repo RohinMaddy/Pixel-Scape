@@ -66,4 +66,16 @@ class HomeViewModel {
             }
         }
     }
+    
+    func getSavedImages() -> [ImageData] {
+        return imageService.fetchSavedImage()
+    }
+    
+    func toggleSave(imageId: Int64, ImageUrl:  String, isLiked: Bool) {
+        if !isLiked {
+            imageService.saveImage(imageId, imageUrl: ImageUrl)
+        } else {
+            imageService.deleteImage(imageId)
+        }
+    }
 }

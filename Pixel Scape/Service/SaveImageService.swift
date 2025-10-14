@@ -9,9 +9,9 @@ import Foundation
 import CoreData
 
 protocol ImageStorageService {
-    func saveImageURL(_ image: ImageData)
-    func fetchSavedImageURLs() -> [ImageData]
-    func deleteImageURL(_ url: Int64)
+    func saveImage(_ id: Int64, imageUrl: String)
+    func fetchSavedImage() -> [ImageData]
+    func deleteImage(_ id: Int64)
 }
 
 final class SaveImageService: ImageStorageService {
@@ -21,15 +21,15 @@ final class SaveImageService: ImageStorageService {
         self.context = context
     }
 
-    func saveImageURL(_ image: ImageData) {
+    func saveImage(_ id: Int64, imageUrl: String) {
         let entity = ImageData(context: context)
-        entity.id = image.id
-        entity.imageUrl = image.imageUrl
+        entity.id = id
+        entity.imageUrl = imageUrl
         
         saveContext()
     }
 
-    func fetchSavedImageURLs() -> [ImageData] {
+    func fetchSavedImage() -> [ImageData] {
         let request = ImageData.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ImageData.id, ascending: false)]
         
@@ -41,16 +41,19 @@ final class SaveImageService: ImageStorageService {
         }
     }
 
-    func deleteImageURL(_ id: Int64) {
-        let request = ImageData.fetchRequest()
-        request.predicate = NSPredicate(format: "id == %@", id)
-        
+    func deleteImage(_ id: Int64) {
+        if let result = try? context.fetch(ImageData.fetchRequest()) {
+            for object in result {
+                if object.id == id {
+                    context.delete(object)
+                }
+            }
+        }
+
         do {
-            let results = try context.fetch(request)
-            results.forEach(context.delete)
-            saveContext()
+            try context.save()
         } catch {
-            print("Delete error: \(error)")
+            print("Error deleting")
         }
     }
 

@@ -30,6 +30,8 @@ class ImageCell: UICollectionViewCell {
     private var buttonHeightConstraint: NSLayoutConstraint!
     private var buttonWidthConstraint: NSLayoutConstraint!
     
+    var onSaveTapped: (() -> Void)?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -42,8 +44,15 @@ class ImageCell: UICollectionViewCell {
         setup()
     }
     
-    func configure(with urlString: String) {
+    func configure(with urlString: String, isLiked: Bool = false) {
         loadImage(from: urlString)
+        setButtonImage(isLiked: isLiked)
+    }
+    
+    func setButtonImage(isLiked: Bool) {
+        let imageName = isLiked ? "heart.circle" : "heart.circle.fill"
+        
+        button.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
     private func setup() {
@@ -88,7 +97,7 @@ class ImageCell: UICollectionViewCell {
     
     @objc
     private func handleLikedButtonTapped() {
-        
+        onSaveTapped?()
     }
 }
 
