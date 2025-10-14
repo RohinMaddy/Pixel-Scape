@@ -13,11 +13,12 @@ class HomeViewModel {
     @Published private(set) var searchText: String?
     @Published private(set) var imageData: Pixel?
     
-    private let apiService = PixelApiService()
+    private let apiService: ApiService
     var isFetching = false
     var onItemsAppended: (([IndexPath]) -> Void)?
     
-    init () {
+    init (apiService: ApiService) {
+        self.apiService = apiService
         Task {
             fetchPixel()
         }

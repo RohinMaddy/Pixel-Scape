@@ -7,7 +7,12 @@
 
 import Foundation
 
-class PixelApiService {
+protocol ApiService {
+    func getCuratedPhotos(page: Int) async throws -> Pixel
+    func getSearchedWallpapers(query: String, page: Int) async throws -> Pixel
+}
+
+class PixelApiService: ApiService {
     
     private let baseUrl = "https://api.pexels.com/v1/"
     private let pageLimit = 20

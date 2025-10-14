@@ -15,9 +15,9 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var searchTextField: UITextField!
     @IBOutlet weak var imageCollectionView: UICollectionView!
     
-    private let viewModel = HomeViewModel()
+    private let viewModel = AppContainer.shared.homeViewModel
     private var subscriptions = Set<AnyCancellable>()
-    private let layout = PixelFlowLayout()
+    private let layout = AppContainer.shared.flowLayout
     private let refreshControl = UIRefreshControl()
     private var page = 1
     
