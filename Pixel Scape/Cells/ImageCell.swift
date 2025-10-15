@@ -49,6 +49,10 @@ class ImageCell: UICollectionViewCell {
         setButtonImage(isLiked: isLiked)
     }
     
+    func hideButton() {
+        button.isHidden = true
+    }
+    
     func setButtonImage(isLiked: Bool) {
         let imageName = isLiked ? "heart.circle" : "heart.circle.fill"
         

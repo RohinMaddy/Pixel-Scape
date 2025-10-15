@@ -232,7 +232,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="lAf-Ye-41l">
-                                <rect key="frame" x="0.0" y="60" width="393" height="792"/>
+                                <rect key="frame" x="10" y="70" width="373" height="782"/>
                                 <color key="backgroundColor" name="backgroundColorSecondary"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="HRS-nl-ZjQ">
                                     <size key="itemSize" width="128" height="128"/>
@@ -247,11 +247,14 @@
                         <color key="backgroundColor" name="backgroundColorSecondary"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="lAf-Ye-41l" secondAttribute="bottom" id="aoW-EF-Vmo"/>
-                            <constraint firstItem="lAf-Ye-41l" firstAttribute="leading" secondItem="r2r-PK-Svs" secondAttribute="leading" id="dLI-hX-Up7"/>
-                            <constraint firstItem="r2r-PK-Svs" firstAttribute="trailing" secondItem="lAf-Ye-41l" secondAttribute="trailing" id="ehC-u2-O3t"/>
-                            <constraint firstItem="lAf-Ye-41l" firstAttribute="top" secondItem="c9t-1Y-lEK" secondAttribute="top" constant="60" id="fSs-Ah-b0M"/>
+                            <constraint firstItem="lAf-Ye-41l" firstAttribute="leading" secondItem="r2r-PK-Svs" secondAttribute="leading" constant="10" id="dLI-hX-Up7"/>
+                            <constraint firstItem="r2r-PK-Svs" firstAttribute="trailing" secondItem="lAf-Ye-41l" secondAttribute="trailing" constant="10" id="ehC-u2-O3t"/>
+                            <constraint firstItem="lAf-Ye-41l" firstAttribute="top" secondItem="c9t-1Y-lEK" secondAttribute="top" constant="70" id="fSs-Ah-b0M"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="likedImageCollectionView" destination="lAf-Ye-41l" id="uyX-dZ-VRq"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UCk-Zz-dkl" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class HomeViewModel {
     
@@ -17,13 +18,25 @@ class HomeViewModel {
     private let imageService: ImageStorageService
     var isFetching = false
     var onItemsAppended: (([IndexPath]) -> Void)?
+    var onLiked: ((IndexPath, Bool) -> Void)?
+    var savedImages: [ImageData]?
     
-    init (apiService: ApiService, imageService: ImageStorageService) {
+    private var cancellables = Set<AnyCancellable>()
+
+    init(apiService: ApiService, imageService: ImageStorageService) {
         self.apiService = apiService
         self.imageService = imageService
-        Task {
-            fetchPixel()
-        }
+
+        imageService.changesPublisher
+            .sink { [weak self] in
+                self?.refreshLikes()
+            }
+            .store(in: &cancellables)
+    }
+
+    private func refreshLikes() {
+        print("HomeViewModel: detected Core Data change")
+        savedImages = imageService.fetchSavedImage()
     }
     
     func fetchPixel(page: Int = 1, query: String? = nil) {
@@ -67,15 +80,17 @@ class HomeViewModel {
         }
     }
     
-    func getSavedImages() -> [ImageData] {
-        return imageService.fetchSavedImage()
+    func getSavedImages() {
+        savedImages = imageService.fetchSavedImage()
     }
     
-    func toggleSave(imageId: Int64, ImageUrl:  String, isLiked: Bool) {
+    func toggleSave(imageId: Int64, ImageUrl:  String, isLiked: Bool, indexPath: IndexPath) {
         if !isLiked {
             imageService.saveImage(imageId, imageUrl: ImageUrl)
         } else {
             imageService.deleteImage(imageId)
         }
+        
+        onLiked?(indexPath, isLiked)
     }
 }

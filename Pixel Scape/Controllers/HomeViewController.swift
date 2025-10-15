@@ -17,9 +17,10 @@ class HomeViewController: UIViewController {
     
     private let viewModel = AppContainer.shared.homeViewModel
     private var subscriptions = Set<AnyCancellable>()
-    private let layout = AppContainer.shared.flowLayout
+    private let layout = PixelFlowLayout()
     private let refreshControl = UIRefreshControl()
     private var page = 1
+    private var cachedHeights: [Int: CGFloat] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,8 @@ class HomeViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(didPullToRefresh(_:)), for: .valueChanged)
         imageCollectionView.alwaysBounceVertical = true
         imageCollectionView.refreshControl = refreshControl
+        viewModel.fetchPixel()
+        viewModel.getSavedImages()
     }
     
     func setupTextField() {
@@ -47,8 +50,12 @@ class HomeViewController: UIViewController {
     func applyBindings(in subscriptions: inout Set<AnyCancellable>) {
         viewModel.$imageData
             .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.imageCollectionView.reloadData()
+                guard let self else { return }
+                if self.isViewLoaded && self.view.window != nil {
+                    self.imageCollectionView.reloadData()
+                }
             }
             .store(in: &subscriptions)
         viewModel.$searchText
@@ -70,10 +77,19 @@ class HomeViewController: UIViewController {
     @MainActor
     func updateCollectionView() {
         viewModel.onItemsAppended = { [weak self] indexPaths in
-            guard let self = self else { return }
-            self.imageCollectionView.performBatchUpdates {
-                self.imageCollectionView.insertItems(at: indexPaths)
+            guard let self else { return }
+            if self.imageCollectionView.hasUncommittedUpdates {
+                self.imageCollectionView.reloadData()
+            } else {
+                self.imageCollectionView.performBatchUpdates({
+                    self.imageCollectionView.insertItems(at: indexPaths)
+                })
             }
+        }
+        
+        viewModel.onLiked = {[weak self] (indexPath, isLiked) in
+            guard let self = self else { return }
+            self.imageCollectionView.reloadItems(at: [indexPath])
         }
     }
     
@@ -93,19 +109,24 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row != viewModel.imageData?.photos.count {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ImageCell.identifier, for: indexPath) as! ImageCell
-            if let imageId = viewModel.imageData?.photos[indexPath.row].id,
-                let imageUrl = viewModel.imageData?.photos[indexPath.row].src.portrait {
-                let isLiked =  viewModel.getSavedImages().contains(where: { $0.id == imageId })
-                print(isLiked)
+            
+            if let photo = viewModel.imageData?.photos[indexPath.row] {
+                let isLiked = viewModel.savedImages?.contains { $0.id == photo.id }
+                
+                cell.configure(with: photo.src.portrait, isLiked: isLiked ?? false)
+                
                 cell.onSaveTapped = { [weak self] in
-                    cell.setButtonImage(isLiked: isLiked)
-                    self?.viewModel.toggleSave(imageId: Int64(imageId), ImageUrl: imageUrl, isLiked: isLiked)
-                    self?.imageCollectionView.reloadItems(at: [indexPath])
+                    guard let self = self else { return }
+                    
+                    self.viewModel.toggleSave(
+                        imageId: Int64(photo.id),
+                        ImageUrl: photo.src.portrait,
+                        isLiked: isLiked ?? false,
+                        indexPath: indexPath
+                    )
                 }
-                cell.configure(with: imageUrl, isLiked: isLiked)
             }
             return cell
-            
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LoaderCell.identifier, for: indexPath) as! LoaderCell
             cell.indicator.startAnimating()
@@ -117,9 +138,14 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         return (viewModel.imageData?.photos.count ?? 0 > 0) ? ((viewModel.imageData?.photos.count ?? 0) + 1) : 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize
-    {
-        return layout.updateLayout(for: CGFloat.random(in: 250...350))
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if cachedHeights[indexPath.row] == nil {
+            cachedHeights[indexPath.row] = CGFloat.random(in: 250...350)
+        }
+        return layout.updateLayout(for: cachedHeights[indexPath.row]!)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

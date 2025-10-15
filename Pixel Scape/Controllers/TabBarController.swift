@@ -7,11 +7,15 @@
 
 import UIKit
 
-class TabBarController: UITabBarController, UITabBarControllerDelegate {
+final class TabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         delegate = self
         
+        setupTabs()
+    }
+    
+    private func setupTabs() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let home = storyboard.instantiateViewController(withIdentifier: "HomeViewController")
         let liked = storyboard.instantiateViewController(withIdentifier: "LikedViewController")
@@ -27,4 +31,5 @@ class TabBarController: UITabBarController, UITabBarControllerDelegate {
         return true
     }
 }
+
 

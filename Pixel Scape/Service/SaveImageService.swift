@@ -7,17 +7,21 @@
 
 import Foundation
 import CoreData
+import Combine
+import UIKit
 
 protocol ImageStorageService {
+    var changesPublisher: PassthroughSubject<Void, Never> { get }
     func saveImage(_ id: Int64, imageUrl: String)
     func fetchSavedImage() -> [ImageData]
     func deleteImage(_ id: Int64)
 }
 
 final class SaveImageService: ImageStorageService {
-    private let context: NSManagedObjectContext
+    let context: NSManagedObjectContext
+    let changesPublisher = PassthroughSubject<Void, Never>()
 
-    init(context: NSManagedObjectContext = PersistenceController.shared.container.viewContext) {
+    init(context: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext) {
         self.context = context
     }
 
@@ -25,36 +29,28 @@ final class SaveImageService: ImageStorageService {
         let entity = ImageData(context: context)
         entity.id = id
         entity.imageUrl = imageUrl
-        
         saveContext()
+        changesPublisher.send(())
     }
 
     func fetchSavedImage() -> [ImageData] {
-        let request = ImageData.fetchRequest()
+        let request: NSFetchRequest<ImageData> = ImageData.fetchRequest()
         request.sortDescriptors = [NSSortDescriptor(keyPath: \ImageData.id, ascending: false)]
-        
         do {
             return try context.fetch(request)
         } catch {
-            print("Fetch error: \(error)")
             return []
         }
     }
 
     func deleteImage(_ id: Int64) {
         if let result = try? context.fetch(ImageData.fetchRequest()) {
-            for object in result {
-                if object.id == id {
-                    context.delete(object)
-                }
+            for object in result where object.id == id {
+                context.delete(object)
             }
         }
-
-        do {
-            try context.save()
-        } catch {
-            print("Error deleting")
-        }
+        saveContext()
+        changesPublisher.send(())
     }
 
     private func saveContext() {
@@ -62,8 +58,11 @@ final class SaveImageService: ImageStorageService {
             do {
                 try context.save()
             } catch {
-                print("Save error: \(error)")
+                if let error = error as NSError? {
+                    fatalError("Unresolved error \(error), \(error.userInfo)")
+                }
             }
         }
     }
 }
+
