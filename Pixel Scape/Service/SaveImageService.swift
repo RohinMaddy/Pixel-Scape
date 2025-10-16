@@ -21,7 +21,7 @@ final class SaveImageService: ImageStorageService {
     let context: NSManagedObjectContext
     let changesPublisher = PassthroughSubject<Void, Never>()
 
-    init(context: NSManagedObjectContext = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext) {
+    init(context: NSManagedObjectContext) {
         self.context = context
     }
 
