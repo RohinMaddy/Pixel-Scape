@@ -6,8 +6,19 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXContainerItemProxy section */
+		9B7AD0722EA1254300B2B2D3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 9B3EA1F42D8977F800549726 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 9B3EA1FB2D8977F800549726;
+			remoteInfo = "Pixel Scape";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		9B3EA1FC2D8977F800549726 /* Pixel Scape.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Pixel Scape.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9B7AD06E2EA1254300B2B2D3 /* Pixel ScapeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Pixel ScapeTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -29,10 +40,22 @@
 			path = "Pixel Scape";
 			sourceTree = "<group>";
 		};
+		9B7AD06F2EA1254300B2B2D3 /* Pixel ScapeTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "Pixel ScapeTests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		9B3EA1F92D8977F800549726 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B7AD06B2EA1254300B2B2D3 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -45,6 +68,7 @@
 		9B3EA1F32D8977F800549726 = {
 			isa = PBXGroup;
 			children = (
+				9B7AD06F2EA1254300B2B2D3 /* Pixel ScapeTests */,
 				9B3EA1FD2D8977F800549726 /* Products */,
 				9B3EA1FE2D8977F800549726 /* Pixel Scape */,
 			);
@@ -54,6 +78,7 @@
 			isa = PBXGroup;
 			children = (
 				9B3EA1FC2D8977F800549726 /* Pixel Scape.app */,
+				9B7AD06E2EA1254300B2B2D3 /* Pixel ScapeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -83,6 +108,29 @@
 			productReference = 9B3EA1FC2D8977F800549726 /* Pixel Scape.app */;
 			productType = "com.apple.product-type.application";
 		};
+		9B7AD06D2EA1254300B2B2D3 /* Pixel ScapeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9B7AD0742EA1254300B2B2D3 /* Build configuration list for PBXNativeTarget "Pixel ScapeTests" */;
+			buildPhases = (
+				9B7AD06A2EA1254300B2B2D3 /* Sources */,
+				9B7AD06B2EA1254300B2B2D3 /* Frameworks */,
+				9B7AD06C2EA1254300B2B2D3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9B7AD0732EA1254300B2B2D3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				9B7AD06F2EA1254300B2B2D3 /* Pixel ScapeTests */,
+			);
+			name = "Pixel ScapeTests";
+			packageProductDependencies = (
+			);
+			productName = "Pixel ScapeTests";
+			productReference = 9B7AD06E2EA1254300B2B2D3 /* Pixel ScapeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -90,11 +138,15 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2600;
 				LastUpgradeCheck = 1620;
 				TargetAttributes = {
 					9B3EA1FB2D8977F800549726 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					9B7AD06D2EA1254300B2B2D3 = {
+						CreatedOnToolsVersion = 26.0.1;
+						TestTargetID = 9B3EA1FB2D8977F800549726;
 					};
 				};
 			};
@@ -113,12 +165,20 @@
 			projectRoot = "";
 			targets = (
 				9B3EA1FB2D8977F800549726 /* Pixel Scape */,
+				9B7AD06D2EA1254300B2B2D3 /* Pixel ScapeTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		9B3EA1FA2D8977F800549726 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9B7AD06C2EA1254300B2B2D3 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -135,7 +195,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9B7AD06A2EA1254300B2B2D3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		9B7AD0732EA1254300B2B2D3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 9B3EA1FB2D8977F800549726 /* Pixel Scape */;
+			targetProxy = 9B7AD0722EA1254300B2B2D3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		9B3EA2102D8977FA00549726 /* Debug */ = {
@@ -313,6 +388,50 @@
 			};
 			name = Release;
 		};
+		9B7AD0752EA1254300B2B2D3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q9T822S676;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rohinmadhavan.Pixel-ScapeTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pixel Scape.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pixel Scape";
+			};
+			name = Debug;
+		};
+		9B7AD0762EA1254300B2B2D3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Q9T822S676;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.rohinmadhavan.Pixel-ScapeTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Pixel Scape.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Pixel Scape";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -330,6 +449,15 @@
 			buildConfigurations = (
 				9B3EA2102D8977FA00549726 /* Debug */,
 				9B3EA2112D8977FA00549726 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9B7AD0742EA1254300B2B2D3 /* Build configuration list for PBXNativeTarget "Pixel ScapeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9B7AD0752EA1254300B2B2D3 /* Debug */,
+				9B7AD0762EA1254300B2B2D3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
