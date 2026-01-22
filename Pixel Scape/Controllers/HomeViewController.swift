@@ -95,6 +95,7 @@ class HomeViewController: UIViewController {
     
     @objc
     private func didPullToRefresh(_ sender: Any) {
+        searchTextField.text = ""
         viewModel.fetchPixel()
         refreshControl.endRefreshing()
     }
