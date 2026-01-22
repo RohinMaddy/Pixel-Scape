@@ -17,6 +17,7 @@ class EditViewController: UIViewController {
     @IBOutlet weak var colorPicker: UIColorWell!
     @IBOutlet weak var fontSlider: UISlider!
     @IBOutlet weak var sliderView: UIView!
+    @IBOutlet weak var filterCollectionView: UICollectionView!
     
     private var imageText: UITextView!
     private var doneButton: UIButton!
@@ -49,6 +50,7 @@ class EditViewController: UIViewController {
         setupColorWell()
         setUpButtons()
         setUpImageView()
+        setupCollectionView()
     }
     
     private func setUpImageView() {
@@ -230,5 +232,23 @@ extension EditViewController: UITextViewDelegate {
 
         textView.frame.size.height = newSize.height
         frameHeight = newSize.height
+    }
+}
+
+extension EditViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func setupCollectionView () {
+        filterCollectionView.delegate = self
+        filterCollectionView.dataSource = self
+        filterCollectionView.register(FilterCell.self, forCellWithReuseIdentifier: FilterCell.identifier)
+        filterCollectionView.layer.cornerRadius = 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return 0
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell
+        return cell
     }
 }

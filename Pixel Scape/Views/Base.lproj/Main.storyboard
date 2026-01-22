@@ -237,6 +237,7 @@
                     <connections>
                         <outlet property="colorPicker" destination="Ub4-Pv-LFt" id="1wF-N2-hKN"/>
                         <outlet property="continueButton" destination="lbu-KE-2yo" id="LJm-JK-PFw"/>
+                        <outlet property="filterCollectionView" destination="eD2-ya-cbm" id="gin-HD-5SS"/>
                         <outlet property="fontPickerView" destination="pvq-Q3-nH6" id="dMN-qs-Yl2"/>
                         <outlet property="fontSlider" destination="CKJ-xB-1hp" id="9Q6-jY-ldQ"/>
                         <outlet property="image" destination="8yC-XW-OY2" id="2zR-sQ-CI4"/>
