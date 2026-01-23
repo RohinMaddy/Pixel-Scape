@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 class EditViewController: UIViewController {
 
@@ -17,12 +18,15 @@ class EditViewController: UIViewController {
     @IBOutlet weak var colorPicker: UIColorWell!
     @IBOutlet weak var fontSlider: UISlider!
     @IBOutlet weak var sliderView: UIView!
+    @IBOutlet weak var filterCollectionView: UICollectionView!
     
     private var imageText: UITextView!
     private var doneButton: UIButton!
     private var editButton: UIButton!
     private let availableFonts = UIFont.familyNames.sorted()
     private var frameHeight = CGFloat(0)
+    private let viewModel = AppContainer.shared.editViewModel
+    private var subscriptions = Set<AnyCancellable>()
     
     var imageUrl: String? = nil
     
@@ -31,6 +35,27 @@ class EditViewController: UIViewController {
         self.hideKeyboardWhenTappedAround() 
 
         setupViews()
+        applyBindings(in: &subscriptions)
+    }
+    
+    func applyBindings(in subscriptions: inout Set<AnyCancellable>) {
+        viewModel.$filterImages
+            .receive(on: DispatchQueue.main)
+            .debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                if self.isViewLoaded && self.view.window != nil {
+                    self.filterCollectionView.reloadData()
+                }
+            }
+            .store(in: &subscriptions)
+        viewModel.$selectedImage
+            .receive(on: RunLoop.main)
+            .sink { [weak self] image in
+                guard let image else { return }
+                self?.image.image = image
+            }
+            .store(in: &subscriptions)
     }
     
     func setupViews() {
@@ -44,11 +69,13 @@ class EditViewController: UIViewController {
         fontPickerView.dataSource = self
         
         pickerView.isHidden = true
+        filterCollectionView.isHidden = true
         
         setupTextView()
         setupColorWell()
         setUpButtons()
         setUpImageView()
+        setupCollectionView()
     }
     
     private func setUpImageView() {
@@ -61,6 +88,8 @@ class EditViewController: UIViewController {
                 if let image = UIImage(data: data) {
                     DispatchQueue.main.async {
                         self.image.image = image
+                        self.viewModel.setImage(image: image)
+                        self.viewModel.loadThumbnails()
                     }
                 }
             }.resume()
@@ -185,6 +214,7 @@ class EditViewController: UIViewController {
         doneButton.isEnabled = false
         pickerView.isHidden = false
         imageText.isUserInteractionEnabled = false
+        filterCollectionView.isHidden = false
         imageText.becomeFirstResponder()
     }
 
@@ -199,6 +229,7 @@ class EditViewController: UIViewController {
         doneButton.isEnabled = true
         pickerView.isHidden = true
         imageText.isUserInteractionEnabled = true
+        filterCollectionView.isHidden = true
     }
     
 }
@@ -230,5 +261,28 @@ extension EditViewController: UITextViewDelegate {
 
         textView.frame.size.height = newSize.height
         frameHeight = newSize.height
+    }
+}
+
+extension EditViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    func setupCollectionView () {
+        filterCollectionView.delegate = self
+        filterCollectionView.dataSource = self
+        filterCollectionView.register(FilterCell.self, forCellWithReuseIdentifier: FilterCell.identifier)
+        filterCollectionView.layer.cornerRadius = 10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return viewModel.filterImages.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterCell.identifier, for: indexPath) as! FilterCell
+        cell.loadImage(image: viewModel.filterImages[indexPath.row].image)
+        return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewModel.applyFilter(viewModel.filterImages[indexPath.row].filter)
     }
 }
