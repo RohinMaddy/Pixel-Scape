@@ -185,9 +185,9 @@
                                             <constraint firstAttribute="trailing" secondItem="wer-ve-Ppw" secondAttribute="trailing" constant="10" id="zdy-MI-GKk"/>
                                         </constraints>
                                     </view>
-                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" alpha="0.5" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eD2-ya-cbm">
+                                    <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="eD2-ya-cbm">
                                         <rect key="frame" x="0.0" y="617" width="393" height="60"/>
-                                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="60" id="3lt-Ww-fff"/>
                                         </constraints>

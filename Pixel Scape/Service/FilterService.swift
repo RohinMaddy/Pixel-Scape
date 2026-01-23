@@ -15,14 +15,15 @@ struct FilteredImage {
 }
 
 protocol FilterServiceProtocol {
-    func getThumbnails(from image: UIImage) async -> [FilteredImage]
+    func getThumbnails(from image: UIImage) async throws -> [FilteredImage]
+    func apply(filter: Filter, to image: CIImage) -> UIImage?
 }
 
 
 final class FilterService: FilterServiceProtocol {
     private let context = CIContext()
     
-    func getThumbnails(from image: UIImage) async -> [FilteredImage] {
+    func getThumbnails(from image: UIImage) async throws -> [FilteredImage] {
         
         let resized = image.aspectFittedToHeight(80)
         let ciImage = CIImage(image: resized)!
@@ -48,10 +49,7 @@ final class FilterService: FilterServiceProtocol {
             return results
         }
     }
-}
-
-private extension FilterService {
-
+    
     func apply(filter: Filter, to image: CIImage) -> UIImage? {
 
         let outputImage: CIImage

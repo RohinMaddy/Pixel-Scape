@@ -16,11 +16,12 @@ class FilterCell: UICollectionViewCell {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10
+        imageView.layer.cornerRadius = 5
         return imageView
     }()
     
     private var heightConstraint: NSLayoutConstraint!
+    private var widthConstraint: NSLayoutConstraint!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -40,6 +41,8 @@ class FilterCell: UICollectionViewCell {
         
         heightConstraint = imageView.heightAnchor.constraint(equalToConstant: 60.0)
         heightConstraint.isActive = true
+        widthConstraint = imageView.widthAnchor.constraint(equalToConstant: 50.0)
+        widthConstraint.isActive = true
         
         NSLayoutConstraint.activate([
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
@@ -49,8 +52,7 @@ class FilterCell: UICollectionViewCell {
         ])
     }
     
-    private func loadImage(image: UIImage) {
-        imageView.backgroundColor = .backgroundColorSecondary
+    func loadImage(image: UIImage) {
         imageView.image = image
     }
 }
